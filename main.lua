@@ -10,8 +10,8 @@ game = {
     },
     
     view = {
-        width = 180,
-        height = 320
+        width = 1200,
+        height = 1200
     }
 }
 
@@ -39,12 +39,12 @@ end
 -- Initialize the ECS world
 function initializeECSWorld()
     return tiny.world(
-        entity.player(90, 300),
+        entity.player(300, 580),
         entity.enemySpawner(),
 
         system.enemySpawner,
         system.playerInput,
-        system.playerLaser,
+        system.laserSystem,
         system.friction,
         system.movement,
         system.projectileCollision,

@@ -17,7 +17,7 @@ system.enemySpawner.filter = tiny.requireAll("spawner")
 system.enemySpawner.interval = 1
 function system.enemySpawner:process(entity)
     self.interval = math.prandom(1, 3)
-    local x, y = math.prandom(16, 174), -15
+    local x, y = math.prandom(20, 580), -15
     self.world:add(enemy(x, y, 0, 100))
 end
 
@@ -40,17 +40,8 @@ function system.playerInput:process(entity)
 end
 
 -- Player Laser System
-system.playerLaser = tiny.processingSystem()
-system.playerLaser.filter = tiny.requireAll("player", "position")
-system.playerLaser.interval = 0.25
-function system.playerLaser:process(entity)
-    local laser_one = laser(entity.position.x-12, entity.position.y-8, 0, -400, "enemy")
-    self.world:add(
-        laser_one,
-        laser(entity.position.x+12, entity.position.y-8, 0, -400, "enemy")
-    )
-    love.audio.play(laser_one.sound.fire)
-end
+local laserSystem = require("systems/laser")
+system.laserSystem = laserSystem
 
 -- Friction System
 system.friction = tiny.processingSystem()
@@ -87,8 +78,8 @@ function system.movement:process(entity, delta_time)
     -- Maybe I should make this its own system?
     if entity.player ~= nil then
         local x, y = entity.position.x, entity.position.y
-        if x < 0 or x > 180 then entity.position.x = last_x entity.velocity.x = -entity.velocity.x end
-        if y < 0 or y > 320 then entity.position.y = last_y entity.velocity.y = -entity.velocity.y end
+        if x < 0 or x > 600 then entity.position.x = last_x entity.velocity.x = -entity.velocity.x end
+        if y < 0 or y > 600 then entity.position.y = last_y entity.velocity.y = -entity.velocity.y end
     end
 end
 
@@ -125,7 +116,7 @@ end
 system.destroyOffscreen = tiny.processingSystem()
 system.destroyOffscreen.filter = tiny.requireAll("position")
 function system.destroyOffscreen:process(entity)
-    if entity.position.y < -32 or entity.position.y > 352 then
+    if entity.position.y < -32 or entity.position.y > 600 then
         self.world:remove(entity)
     end
 end
