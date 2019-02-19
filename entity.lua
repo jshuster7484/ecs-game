@@ -10,7 +10,7 @@ function entity.player(x, y)
         collision = component.collision(16),
         velocity = component.velocity(0, 0, 20, 0, 200),
         health = component.health(4),
-        power = component.power(1, 0),
+        power = component.power(1),
         sound = {
             die = component.sound("resources/audio/explode.wav")
         },
@@ -23,6 +23,7 @@ function entity.enemy(x, y, x_speed, y_speed)
     return {
         enemy = true,
         projectile = true,
+        drop = true,
         position = component.position(x, y),
         collision = component.collision(10),
         velocity = component.velocity(x_speed, y_speed, 0, 0, 1000),

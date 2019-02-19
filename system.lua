@@ -1,4 +1,4 @@
-local tiny = require("libraries/tiny")
+-- local tiny = require("libraries/tiny")
 local component = require("component")
 local utils = require("libraries/utils")
 local math = require("libraries/math")
@@ -70,7 +70,7 @@ function system.movement:process(entity, delta_time)
     end
 end
 
--- Collision System
+-- Projectile Collision System
 system.projectileCollision = tiny.processingSystem()
 system.projectileCollision.filter = tiny.requireAll("projectile", "damage", "target", "collision")
 function system.projectileCollision:process(entity)
@@ -88,24 +88,14 @@ function system.projectileCollision:process(entity)
     end
 end
 
--- No Health System
+-- Zero Health System
 system.noHealth = tiny.processingSystem()
 system.noHealth.filter = tiny.requireAll("position", "health")
 function system.noHealth:process(entity)
     if entity.health.amount <= 0 then
         self.world:add(explosion(entity.position.x, entity.position.y))
-        self.world:add(powerup(entity.position.x, entity.position.y))
         self.world:remove(entity)
         if entity.sound and entity.sound.die then love.audio.play(entity.sound.die) end
-    end
-end
-
--- Offscreen System
-system.destroyOffscreen = tiny.processingSystem()
-system.destroyOffscreen.filter = tiny.requireAll("position")
-function system.destroyOffscreen:process(entity)
-    if entity.position.y < -32 or entity.position.y > 1200 then
-        self.world:remove(entity)
     end
 end
 

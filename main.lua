@@ -21,7 +21,7 @@ game = {
 -- Load
 function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest")
-    game.world = initializeECSWorld()
+    world = initializeECSWorld()
     local sound = love.audio.newSource("resources/audio/music.mp3", "stream")
     love.audio.play(sound)
 
@@ -43,7 +43,7 @@ function love.update(dt)
 
 
     local dt = love.timer.getDelta()
-    game.world:update(dt, updateFilter)
+    world:update(dt, updateFilter)
 
     -- Profiling
     -- if love.frame%100 == 0 then
@@ -56,8 +56,15 @@ end
 function love.draw()
     system.draw:update()
 
-    local dt = love.timer.getDelta()
-    -- game.world:update(dt, drawFilter)
+    -- Draw FPS & Entity Count
+    love.graphics.print("FPS: " .. love.timer.getFPS(), 1100, 0)
+    love.graphics.print("Entities: " .. tiny.getEntityCount(world), 1100, 20)
+    if PLAYER then
+        love.graphics.print("Power: " .. PLAYER.power.amount, 1100, 40)
+    end
+
+    -- Profiling
+    -- local dt = love.timer.getDelta()
     -- love.graphics.print(love.report or "Please wait...")
 end
 
@@ -68,7 +75,6 @@ function initializeECSWorld()
         PLAYER,
         entity.enemySpawner(),
 
-        -- system.enemySpawnSystem,
         require("systems.enemySpawn"),
         system.playerInput,
         require("systems.laser"),
@@ -76,9 +82,10 @@ function initializeECSWorld()
         system.movement,
         system.projectileCollision,
         require("systems.powerup"),
+        require("systems.drop"),
         system.noHealth,
         system.timer,
-        system.destroyOffscreen,
+        require("systems.offscreen"),
         system.draw
     )
 end

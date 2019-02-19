@@ -32,7 +32,6 @@ end
 -- Power
 function component.power(amount, time)
     return {
-        time = time,
         amount = amount
     }
 end
