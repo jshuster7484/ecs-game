@@ -1,7 +1,10 @@
-local tiny = require("libraries/tiny")
+tiny = require("libraries/tiny")
 local system = require("system")
 local entity = require("entity")
 local component = require("component")
+
+local drawFilter = tiny.requireAll("sprite")
+local updateFilter = tiny.rejectAny("sprite")
 
 game = {
     window = {
@@ -21,25 +24,48 @@ function love.load()
     game.world = initializeECSWorld()
     local sound = love.audio.newSource("resources/audio/music.mp3", "stream")
     love.audio.play(sound)
+
+    -- Profiling
+    -- love.profiler = require("libraries/profile")
+    -- love.profiler.hookall("Lua")
+    -- love.profiler.start()
 end
 
 -- Update
-function love.update(delta_time)
-    game.world:update(delta_time)
+
+-- Profiling
+-- love.frame = 0
+
+
+function love.update(dt)
+
+    -- Profiling
+    -- love.frame = love.frame + 1
+
+
+    local dt = love.timer.getDelta()
+    game.world:update(dt, updateFilter)
+
+    -- Profiling
+    -- if love.frame%100 == 0 then
+    --     love.report = love.profiler.report('time', 20)
+    --     love.profiler.reset()
+    -- end
 end
 
 -- Draw
 function love.draw()
-    love.graphics.push()
-    love.graphics.scale(1/.5, 1/.5)
     system.draw:update()
-    love.graphics.pop()
+
+    local dt = love.timer.getDelta()
+    -- game.world:update(dt, drawFilter)
+    -- love.graphics.print(love.report or "Please wait...")
 end
 
 -- Initialize the ECS world
 function initializeECSWorld()
     return tiny.world(
-        entity.player(300, 580),
+        entity.player(600, 1180),
         entity.enemySpawner(),
 
         system.enemySpawner,
@@ -48,6 +74,7 @@ function initializeECSWorld()
         system.friction,
         system.movement,
         system.projectileCollision,
+        system.powerupCollision,
         system.noHealth,
         system.timer,
         system.destroyOffscreen,

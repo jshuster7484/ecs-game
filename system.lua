@@ -7,6 +7,7 @@ local math = require("libraries/math")
 local entity = require("entity")
 local laser = entity.laser
 local enemy = entity.enemy
+local powerup = entity.powerup
 local explosion = entity.explosion
 
 local system = {}
@@ -17,7 +18,7 @@ system.enemySpawner.filter = tiny.requireAll("spawner")
 system.enemySpawner.interval = 1
 function system.enemySpawner:process(entity)
     self.interval = math.prandom(1, 3)
-    local x, y = math.prandom(20, 580), -15
+    local x, y = math.prandom(20, 1180), -15
     self.world:add(enemy(x, y, 0, 100))
 end
 
@@ -78,16 +79,16 @@ function system.movement:process(entity, delta_time)
     -- Maybe I should make this its own system?
     if entity.player ~= nil then
         local x, y = entity.position.x, entity.position.y
-        if x < 0 or x > 600 then entity.position.x = last_x entity.velocity.x = -entity.velocity.x end
-        if y < 0 or y > 600 then entity.position.y = last_y entity.velocity.y = -entity.velocity.y end
+        if x < 0 or x > 1200 then entity.position.x = last_x entity.velocity.x = -entity.velocity.x end
+        if y < 0 or y > 1200 then entity.position.y = last_y entity.velocity.y = -entity.velocity.y end
     end
 end
 
 -- Collision System
 system.projectileCollision = tiny.processingSystem()
-system.projectileCollision.filter = tiny.requireAll("projectile", "damage", "target")
+system.projectileCollision.filter = tiny.requireAll("projectile", "damage", "target", "collision")
 function system.projectileCollision:process(entity)
-    local filter = tiny.requireAll(entity.target)
+    local filter = tiny.requireAll(entity.target, "collision")
     for i=1, #self.world.entities do
         local loopEntity = self.world.entities[i]
         if filter(self.world, loopEntity) then
@@ -101,12 +102,36 @@ function system.projectileCollision:process(entity)
     end
 end
 
+-- PowerUp System
+system.powerupCollision = tiny.processingSystem()
+system.powerupCollision.filter = tiny.requireAll("power")
+function system.powerupCollision:process(entity)
+    -- local filter = tiny.requireAll("player")
+    -- for i=1, #self.world.entities do
+    --     local loopEntity = self.world.entities[i]
+    --     if filter(self.world, loopEntity) then
+    --         local distance = math.distance(entity.position.x, entity.position.y, loopEntity.position.x, loopEntity.position.y)
+    --         if distance <= entity.collision.radius + loopEntity.collision.radius then
+    --             loopEntity.power.amount = loopEntity.power.amount + 1
+    --             if entity.sound and entity.sound.pickup then love.audio.play(entity.sound.pickup) end
+    --             self.world:remove(entity)
+    --         end
+    --     end
+    -- end
+    entity.power.time = entity.power.time + 1
+    if entity.power.time%500 == 0 then
+        -- print(entity.power.amount)
+        entity.power.amount = entity.power.amount + 1
+    end
+end
+
 -- No Health System
 system.noHealth = tiny.processingSystem()
 system.noHealth.filter = tiny.requireAll("position", "health")
 function system.noHealth:process(entity)
     if entity.health.amount <= 0 then
         self.world:add(explosion(entity.position.x, entity.position.y))
+        self.world:add(powerup(entity.position.x, entity.position.y))
         self.world:remove(entity)
         if entity.sound and entity.sound.die then love.audio.play(entity.sound.die) end
     end
@@ -116,7 +141,7 @@ end
 system.destroyOffscreen = tiny.processingSystem()
 system.destroyOffscreen.filter = tiny.requireAll("position")
 function system.destroyOffscreen:process(entity)
-    if entity.position.y < -32 or entity.position.y > 600 then
+    if entity.position.y < -32 or entity.position.y > 1200 then
         self.world:remove(entity)
     end
 end
@@ -127,7 +152,7 @@ system.timer.filter = tiny.requireAll("timer")
 function system.timer:process(entity, delta_time)
     local timer = entity.timer
     timer.duration = timer.duration - delta_time
-    print(timer.duration)
+    -- print(timer.duration)
     if timer.duration <= 0 then
         self.world:remove(entity)
     end

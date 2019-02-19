@@ -1,4 +1,5 @@
-function love.conf(table)
-    table.window.width = 1200
-    table.window.height = 1200
+function love.conf(t)
+    t.window.width = 1200
+    t.window.height = 1200
+    t.window.vsync = 0
 end

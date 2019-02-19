@@ -29,7 +29,15 @@ function component.health(amount)
     }
 end
 
--- Image
+-- Power
+function component.power(amount, time)
+    return {
+        time = time,
+        amount = amount
+    }
+end
+
+-- Sprite
 function component.sprite(string, origin_x, origin_y)
     return {
         image = love.graphics.newImage(string),

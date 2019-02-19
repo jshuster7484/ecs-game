@@ -10,6 +10,7 @@ function entity.player(x, y)
         collision = component.collision(16),
         velocity = component.velocity(0, 0, 20, 0, 200),
         health = component.health(4),
+        power = component.power(1, 0),
         sound = {
             die = component.sound("resources/audio/explode.wav")
         },
@@ -62,6 +63,20 @@ function entity.explosion(x, y)
         position = component.position(x, y),
         sprite = component.sprite("resources/sprites/explosion center.png", 32, 32),
         timer = component.timer(0.25)
+    }
+end
+
+function entity.powerup(x, y)
+    return {
+        collision = component.collision(4),
+        position = component.position(x, y),
+        powerup = true,
+        sound = {
+            pickup = component.sound("resources/audio/powerup.wav")
+        },
+        sprite = component.sprite("resources/sprites/laser powerup.png", 14, 14),
+        target = "player",
+        velocity = component.velocity(0, 100, 0, 0, 1000),
     }
 end
 
