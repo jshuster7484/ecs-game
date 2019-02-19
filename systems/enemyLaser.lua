@@ -11,6 +11,7 @@ function enemyLaserSystem:process(entity)
     if math.prandom(0,4) <= 1 then
         local enemyLaser = enemyLaser(entity.position.x, entity.position.y+8, 0, 300, "player")
         world:add(enemyLaser)
+        love.audio.play(enemyLaser.sound.fire)
     end
 end
 

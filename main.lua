@@ -57,10 +57,11 @@ function love.draw()
     system.draw:update()
 
     -- Draw FPS & Entity Count
-    love.graphics.print("FPS: " .. love.timer.getFPS(), 1100, 0)
-    love.graphics.print("Entities: " .. tiny.getEntityCount(world), 1100, 20)
+    love.graphics.print("FPS: " .. love.timer.getFPS(), 0, 0)
+    love.graphics.print("Entities: " .. tiny.getEntityCount(world), 0, 20)
     if PLAYER then
-        love.graphics.print("Power: " .. PLAYER.power.amount, 1100, 40)
+        love.graphics.print("Power: " .. PLAYER.power.amount, 1120, 0)
+        love.graphics.print("Health: " .. PLAYER.health.amount, 1120, 20)
     end
 
     -- Profiling

@@ -2,6 +2,9 @@
 local entity = require("entity")
 local laser = entity.laser
 
+-- This breaks established patterns
+local laserSound = love.audio.newSource("resources/audio/laser.wav", "static")
+
 laserSystem = tiny.processingSystem()
 laserSystem.filter = tiny.requireAll("player", "position")
 laserSystem.interval = 0.25
@@ -10,6 +13,7 @@ function laserSystem:process(entity)
     if entity.fire then
         distributedShot(entity, laser)
         -- scatterShot(entity, laser)
+        love.audio.play(laserSound)
     end
 end
 
@@ -20,6 +24,7 @@ end
 
 function distributedShot(player, laser)
     local maxPower = player.power.amount
+    
     for i=1, maxPower do
         local laser = laser(player.position.x + flatDistribution(maxPower, i), player.position.y-8, 0, -400, "enemy")
         world:add(laser)

@@ -68,7 +68,7 @@ function entity.enemyLaser(x, y, x_speed, y_speed, target)
         target = target,
         damage = 1,
         sound = {
-            fire = component.sound("resources/audio/laser.wav"),
+            fire = component.sound("resources/audio/enemy laser.wav"),
             hit = component.sound("resources/audio/hit.wav")
         },
         sprite = component.sprite("resources/sprites/enemy laser.png", 4, 8)
