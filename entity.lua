@@ -8,7 +8,7 @@ function entity.player(x, y)
         player = true,
         position = component.position(x, y),
         collision = component.collision(16),
-        velocity = component.velocity(0, 0, 20, 0, 200),
+        velocity = component.velocity(0, 0, 20, 0, 300),
         health = component.health(4),
         power = component.power(1),
         sound = {
@@ -56,6 +56,22 @@ function entity.laser(x, y, x_speed, y_speed, target)
             hit = component.sound("resources/audio/hit.wav")
         },
         sprite = component.sprite("resources/sprites/laser.png", 4, 8)
+    }
+end
+
+function entity.enemyLaser(x, y, x_speed, y_speed, target)
+    return {
+        projectile = true,
+        position = component.position(x, y),
+        collision = component.collision(4),
+        velocity = component.velocity(x_speed, y_speed, 0, 0, 1000),
+        target = target,
+        damage = 1,
+        sound = {
+            fire = component.sound("resources/audio/laser.wav"),
+            hit = component.sound("resources/audio/hit.wav")
+        },
+        sprite = component.sprite("resources/sprites/enemy laser.png", 4, 8)
     }
 end
 

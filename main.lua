@@ -73,11 +73,13 @@ function initializeECSWorld()
     PLAYER = entity.player(600, 1180) -- Globally available player
     return tiny.world(
         PLAYER,
+        entity.healthDisplay(1000, 1100),
         entity.enemySpawner(),
 
         require("systems.enemySpawn"),
         system.playerInput,
         require("systems.laser"),
+        require("systems.enemyLaser"),
         system.friction,
         system.movement,
         system.projectileCollision,

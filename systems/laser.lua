@@ -7,9 +7,10 @@ laserSystem.filter = tiny.requireAll("player", "position")
 laserSystem.interval = 0.25
 
 function laserSystem:process(entity)
-    
-    distributedShot(entity, laser)
-    -- scatterShot(entity, laser)
+    if entity.fire then
+        distributedShot(entity, laser)
+        -- scatterShot(entity, laser)
+    end
 end
 
 function flatDistribution(max, i)
