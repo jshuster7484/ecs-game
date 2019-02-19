@@ -12,16 +12,6 @@ local explosion = entity.explosion
 
 local system = {}
 
--- Enemy Spawn System
-system.enemySpawner = tiny.processingSystem()
-system.enemySpawner.filter = tiny.requireAll("spawner")
-system.enemySpawner.interval = 1
-function system.enemySpawner:process(entity)
-    self.interval = math.prandom(1, 3)
-    local x, y = math.prandom(20, 1180), -15
-    self.world:add(enemy(x, y, 0, 100))
-end
-
 -- Player Input System
 system.playerInput = tiny.processingSystem()
 system.playerInput.filter = tiny.requireAll("player", "velocity")
@@ -39,10 +29,6 @@ function system.playerInput:process(entity)
     velocity.x = velocity.x+x_input*acceleration
     velocity.y = velocity.y+y_input*acceleration
 end
-
--- Player Laser System
-local laserSystem = require("systems/laser")
-system.laserSystem = laserSystem
 
 -- Friction System
 system.friction = tiny.processingSystem()
@@ -99,29 +85,6 @@ function system.projectileCollision:process(entity)
                 self.world:remove(entity)
             end
         end
-    end
-end
-
--- PowerUp System
-system.powerupCollision = tiny.processingSystem()
-system.powerupCollision.filter = tiny.requireAll("power")
-function system.powerupCollision:process(entity)
-    -- local filter = tiny.requireAll("player")
-    -- for i=1, #self.world.entities do
-    --     local loopEntity = self.world.entities[i]
-    --     if filter(self.world, loopEntity) then
-    --         local distance = math.distance(entity.position.x, entity.position.y, loopEntity.position.x, loopEntity.position.y)
-    --         if distance <= entity.collision.radius + loopEntity.collision.radius then
-    --             loopEntity.power.amount = loopEntity.power.amount + 1
-    --             if entity.sound and entity.sound.pickup then love.audio.play(entity.sound.pickup) end
-    --             self.world:remove(entity)
-    --         end
-    --     end
-    -- end
-    entity.power.time = entity.power.time + 1
-    if entity.power.time%500 == 0 then
-        -- print(entity.power.amount)
-        entity.power.amount = entity.power.amount + 1
     end
 end
 

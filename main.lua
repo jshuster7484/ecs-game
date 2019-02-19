@@ -31,12 +31,11 @@ function love.load()
     -- love.profiler.start()
 end
 
--- Update
 
 -- Profiling
 -- love.frame = 0
 
-
+-- Update
 function love.update(dt)
 
     -- Profiling
@@ -64,17 +63,19 @@ end
 
 -- Initialize the ECS world
 function initializeECSWorld()
+    PLAYER = entity.player(600, 1180) -- Globally available player
     return tiny.world(
-        entity.player(600, 1180),
+        PLAYER,
         entity.enemySpawner(),
 
-        system.enemySpawner,
+        -- system.enemySpawnSystem,
+        require("systems.enemySpawn"),
         system.playerInput,
-        system.laserSystem,
+        require("systems.laser"),
         system.friction,
         system.movement,
         system.projectileCollision,
-        system.powerupCollision,
+        require("systems.powerup"),
         system.noHealth,
         system.timer,
         system.destroyOffscreen,
