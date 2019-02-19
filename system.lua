@@ -119,9 +119,6 @@ system.draw = tiny.processingSystem()
 system.draw.filter = tiny.requireAll("position", "sprite")
 system.draw.active = false
 function system.draw:process(entity)
-    if sprite.quad then 
-        love.graphics.draw(entity.sprite.image, sprite.quad, entity.position.x, entity.position.y)
-    end
     love.graphics.draw(entity.sprite.image, entity.position.x-entity.sprite.origin.x, entity.position.y-entity.sprite.origin.y)
 end
 
